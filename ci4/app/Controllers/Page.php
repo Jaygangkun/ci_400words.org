@@ -11,6 +11,8 @@ class Page extends BaseController
 
     public function login()
     {
+        $this->session->remove('login');
+
         $data = [
             'title' => 'Login',
             'page' => 'login'
@@ -21,11 +23,9 @@ class Page extends BaseController
 
     public function index() {
 
-        $this->session->remove('login');
-
         $data = [
             'title' => 'Index',
-            'page' => 'index'
+            'page' => 'indexs'
         ];
 
         return view('layout', $data);
