@@ -1,0 +1,132 @@
+@font-face {
+    font-family: "Calibri";
+    src: url("../fonts/Calibri.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Calibri-Bold";
+    src: url("../fonts/Calibri-Bold.woff") format("woff");
+}
+
+body {
+    font-family: "Calibri";
+    /* font-size: 12px; */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Calibri-Bold";
+}
+
+.header {
+    position: relative;
+}
+
+.header-logo-img {
+    height: 149px;
+    position: relative;
+    z-index: 1;
+}
+
+.header-blue-line {
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    bottom: 0px;
+    top: 66px;
+    background: #caf0fe;
+}
+
+.status {
+    padding: 5px 20px;
+    text-align: center;
+}
+
+.status-green {
+    background: #ccffcc;
+}
+
+.status-yellow {
+    background: #ffffcc;
+}
+
+.action-link {
+    cursor: pointer;
+    padding: 5px 20px;
+}
+
+.action-link-delete {
+    background: #ff0000;
+    color: #ffffff;
+}
+
+.menu-page-link {
+    padding: 5px 20px;
+    border-radius: 5px;
+    border: 1px solid #000000;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    color: #000000;
+}
+
+.menu-page-link:hover {
+    border: 1px solid #000000;
+}
+
+.menu-page-link[disabled] {
+    cursor: initial;
+    background: #e9ecef !important;
+}
+
+.menu-page-link-green {
+    background: #ccffcc;
+}
+
+.menu-page-link-green:hover {
+    background: #ccffcc;
+    color: #000000;
+}
+
+.menu-page-link-yellow {
+    background: #ffffcc;
+}
+
+.menu-page-link-yellow:hover {
+    background: #ffffcc;
+    color: #000000;
+}
+
+.menu-page-link-blue {
+    background: #caf0fe;
+}
+
+.menu-page-link-blue:hover {
+    background: #caf0fe;
+    color: #000000;
+}
+
+.menu-page-link-red {
+    background: #ff0000;
+    color: #ffffff;
+}
+
+.menu-page-link-red:hover {
+    background: #ff0000;
+    color: #ffffff;
+}
+
+.btn-status-toggle {
+    cursor: pointer;
+}
+
+.btn-story-sort {
+    cursor: pointer;
+}
+
+.view-textarea {
+    padding: 0px;
+    background-color: transparent !important;
+    border: 0px;
+    box-shadow: none !important;
+    resize: none !important;
+}
