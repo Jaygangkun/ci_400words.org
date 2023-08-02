@@ -23,12 +23,26 @@
 </div>
 <script>
 (function($){
-    
-    $(document).on('keyup', '#content', function() {
-        $('#wordsCount').text(countWords($(this).val()));
+    $(document).on('keyup', '#content', function(event) {
+
+        let wordsCount = countWords($(this).val());
+
+        if (wordsCount > maxWordsCount) {
+            $('#wordsCount').css('color', '#ff0000');
+            $('#btnSubmit').attr('disabled', true);
+        } else {
+            $('#wordsCount').css('color', '#000000');
+            $('#btnSubmit').attr('disabled', false);
+        }
+
+        $('#wordsCount').text(wordsCount);
     })
 
     $(document).on('click', '#btnSubmit', function() {
+        if ($(this).attr('disabled')) {
+            return;
+        }
+        
         if ($('#title').val() == '') {
             alert('Please Input title');
             $('#title').focus();
@@ -52,7 +66,7 @@
             dataType: "json",
             success: function(resp) {
                 if(resp.success) {
-                    alert('Submitted Successfully!');
+                    location.href = baseUrl + '/submit-success';
                 }
             }
         })

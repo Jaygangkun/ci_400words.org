@@ -51,6 +51,16 @@ class Page extends BaseController
         return view('layout', $data);
     }
 
+    public function submitSuccess() {
+
+        $data = [
+            'title' => 'Submit',
+            'page' => 'submit-success'
+        ];
+
+        return view('layout', $data);
+    }
+
     public function guide() {
 
         $data = [
@@ -67,9 +77,26 @@ class Page extends BaseController
             return redirect()->to('/login');
         }
 
+        $subPage = isset($_GET['subPage']) ? $_GET['subPage'] : null;
+
+        if (!isset(getSorts()[$subPage])) {
+            $subPage = 'alphabetical';
+        }
+
+        if ($subPage == 'awaitingReview') {
+            $model = new StoryModel();
+            $all = $model->where('is_publish <> 1 OR is_publish IS NULL')->findAll();
+
+            if (count($all) == 0) {
+                $subPage = 'alphabetical';
+            }
+        }
+
         $data = [
             'title' => 'Manage Stories',
-            'page' => 'manage-stories'
+            'page' => 'manage-stories',
+            'subPage' => $subPage,
+            'redirect' => isset($_GET['redirect']) ? $_GET['redirect'] : null
         ];
 
         return view('layout', $data);
@@ -101,8 +128,15 @@ class Page extends BaseController
         $previousStory = null;
 
         if ($story) {
-            $nextStory = $model->getNextStory($story['id']);
-            $previousStory = $model->getPreviousStory($story['id']);
+
+            if ($this->session->has('indexSort')) {
+                $sort = $this->session->get('indexSort');
+            } else {
+                $sort = 'alphabetical';
+            }
+
+            $nextStory = $model->getNextStory($story, $sort);
+            $previousStory = $model->getPreviousStory($story, $sort);
         }
 
         $modelView = new ViewModel();
@@ -134,5 +168,9 @@ class Page extends BaseController
         ];
 
         return view('layout', $data);
+    }
+
+    public function test() {
+        sendMail('jaygangkun@hotmail.com', 'New story submitted', '<a href="'.base_url('/login').'">Admin Login</a>');
     }
 }

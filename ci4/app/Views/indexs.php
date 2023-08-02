@@ -21,7 +21,10 @@
     <table id="stories" class="table">
         <thead>
             <tr>
-                <th scope="col">Title</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -35,18 +38,44 @@
     </div>
 
     <div class="d-flex mt-3">
-        <a class="fw-bold menu-page-link menu-page-link-green me-2" href="<?= base_url('/submit')?>">Submit</a>
-        <a class="menu-page-link menu-page-link-yellow me-2" href="<?= base_url('/indexs')?>">Index</a>
-        <a class="menu-page-link menu-page-link-yellow me-2" href="<?= base_url('/home')?>">Home</a>
+        <a class="fw-bold menu-page-link menu-page-link-green me-2" href="<?= base_url('/submit')?>">Submit a Piece</a>
+        <a class="menu-page-link menu-page-link-blue me-2" href="<?= base_url('/index')?>">Index</a>
+        <a class="menu-page-link menu-page-link-blue me-2" href="<?= base_url('/home')?>">Home</a>
     </div>
 </div>
 <style>
 #stories_wrapper .row:first-of-type {
   display: none;
 }
+
+.table>:not(caption)>*>* {
+    border-width: 0px;
+}
+
+.table tbody tr td {
+    padding: 0px;
+}
+
+.table tbody tr {
+    display: none;
+}
+
+.table tbody tr:nth-of-type(40n+1),
+.table tbody tr:nth-of-type(40n+2),
+.table tbody tr:nth-of-type(40n+3),
+.table tbody tr:nth-of-type(40n+4),
+.table tbody tr:nth-of-type(40n+5),
+.table tbody tr:nth-of-type(40n+6),
+.table tbody tr:nth-of-type(40n+7),
+.table tbody tr:nth-of-type(40n+8),
+.table tbody tr:nth-of-type(40n+9),
+.table tbody tr:nth-of-type(40n+10) {
+    display: table-row;
+}
+
 </style>
 <script>
-const pageLength = 60;
+const pageLength = 40;
 
 (function($){
     var table = $('#stories').DataTable({

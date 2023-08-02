@@ -37,8 +37,8 @@
                         <?php
                     }
                     ?>
-                    <a class="menu-page-link menu-page-link-yellow mx-2" href="<?=base_url('/index')?>">Index</a>
-                    <a class="menu-page-link menu-page-link-yellow mx-2" href="<?=base_url('/home')?>">Home</a>
+                    <a class="menu-page-link menu-page-link-blue mx-2" href="<?=base_url('/index')?>">Index</a>
+                    <a class="menu-page-link menu-page-link-blue mx-2" href="<?=base_url('/home')?>">Home</a>
                 </div>
             </div>
         </div>

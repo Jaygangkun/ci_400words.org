@@ -7,49 +7,37 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 if(!function_exists('sendMail')){
     function sendMail($to, $subject, $body){
-        mail(
-            $to,
-            $subject,
-            $body,
-            array(
-                'Content-type' => 'text/html; charset=iso-8859-1',
-                'From' => 'contact@jpdinvestmentsllc.com',
-                'Reply-To' => 'contact@jpdinvestmentsllc.com',
-                'X-Mailer' => 'PHP/' . phpversion()
-            )
-        );
+        
+        $mail = new PHPMailer();
 
-        // $mail = new PHPMailer();
+        $mail->IsSMTP();
+        // $mail->Host = 'smtp.titan.email';
+        // $mail->Username = 'editor@400words.org';
+        // $mail->Password = '!B4ycgiyn2kmp!';
+        // $mail->Port = 465;
+        $mail->Host = 'smtp.gmail.com';
+        $mail->Username = '400wordseditor@gmail.com';
+        $mail->Password = 'qnilmhsezpfgkpux';
+        $mail->Port = 587;
 
-        // $mail->IsSMTP();
-        // $mail->Host = 'relay-hosting.secureserver.net';
-        // $mail->Username = '_mainaccount@jpdinvestmentsllc.com';
-        // $mail->Password = 'RTn?G_AY$eTi3';
-        // $mail->Port = 587;
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = 'tls';
+        $mail->SMTPDebug  = 1;  
 
-        // // $mail->Host = 'email-smtp.us-east-1.amazonaws.com';
-        // // $mail->Username = 'AKIAXFSFI7CQLOLVJ2F5';
-        // // $mail->Password = 'BADPdQfgqyrEQsikrH1nRwAYgMkZDhw5ZtIMFYTGAiqa';
-        // // $mail->Port = 465;
+        $mail->isHTML();
 
-        // $mail->SMTPAuth = false;
-        // $mail->SMTPSecure = 'tls';
-        // $mail->SMTPDebug  = 1;  
+        $mail->From = '400wordseditor@gmail.com';
+        $mail->FromName = '400words';
 
-        // $mail->isHTML();
+        $mail->Subject = $subject;
+        $mail->Body    = $body;
+        $mail->AddAddress($to);
 
-        // $mail->From = 'contact@jpdinvestmentsllc.com';
-        // $mail->FromName = 'support jpdinvestmentsllc';
-
-        // $mail->Subject = $subject;
-        // $mail->Body    = $body;
-        // $mail->AddAddress($to);
-
-        // if(!$mail->Send()) {
-        //     echo $mail->ErrorInfo;
-        //     return false;
-        // }
-        // return true;
+        if(!$mail->Send()) {
+            echo $mail->ErrorInfo;
+            return false;
+        }
+        return true;
     }
 }
 
@@ -64,4 +52,3 @@ if(!function_exists('getSorts')){
         ];
     }
 }
-

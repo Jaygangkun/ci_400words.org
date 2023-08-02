@@ -35,12 +35,14 @@ $routes->get('/', 'Page::home');
 $routes->get('/index', 'Page::index');
 $routes->get('/home', 'Page::home');
 $routes->get('/submit', 'Page::submit');
+$routes->get('/submit-success', 'Page::submitSuccess');
 $routes->get('/guide', 'Page::guide');
 $routes->get('/manage-stories', 'Page::manageStories');
 $routes->get('/manage-stories/awaiting-review', 'Page::manageStoriesAwaitingReview');
 $routes->get('/story-edit/(:any)', 'Page::storyEdit/$1');
 $routes->get('/story/(:any)', 'Page::storyView/$1');
 $routes->get('/login', 'Page::login');
+$routes->get('/test', 'Page::test');
 
 // Ajax Calls
 $routes->group("ajax", function ($routes) {

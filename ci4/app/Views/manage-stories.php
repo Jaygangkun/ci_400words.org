@@ -4,19 +4,19 @@
         <span>Sort by:</span>
         <ul class="nav">
             <li class="nav-item">
-                <span class="nav-link btn-story-sort disabled" data-value="<?= getSorts()['alphabetical']?>">[alphabetical]</span>
+                <span class="nav-link btn-story-sort <?= $subPage == 'alphabetical' ? "disabled": "" ?>" data-value="<?= getSorts()['alphabetical']?>">[alphabetical]</span>
             </li>
             <li class="nav-item">
-                <span class="nav-link btn-story-sort" data-value="<?= getSorts()['popular']?>">[popular]</span>
+                <span class="nav-link btn-story-sort <?= $subPage == 'popular' ? "disabled": "" ?>" data-value="<?= getSorts()['popular']?>">[popular]</span>
             </li>
             <li class="nav-item">
-                <span class="nav-link btn-story-sort" data-value="<?= getSorts()['newest']?>">[newest]</span>
+                <span class="nav-link btn-story-sort <?= $subPage == 'newest' ? "disabled": "" ?>" data-value="<?= getSorts()['newest']?>">[newest]</span>
             </li>
             <li class="nav-item">
-                <span class="nav-link btn-story-sort" data-value="<?= getSorts()['oldest']?>">[oldest]</span>
+                <span class="nav-link btn-story-sort <?= $subPage == 'oldest' ? "disabled": "" ?>" data-value="<?= getSorts()['oldest']?>">[oldest]</span>
             </li>
             <li class="nav-item">
-                <span class="nav-link btn-story-sort" data-value="<?= getSorts()['awaitingReview']?>">[awaiting review]</span>
+                <span class="nav-link btn-story-sort <?= $subPage == 'awaitingReview' ? "disabled": "" ?>" data-value="<?= getSorts()['awaitingReview']?>">[awaiting review]</span>
             </li>
         </ul>
     </div>

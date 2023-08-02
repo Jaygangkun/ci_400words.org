@@ -10,8 +10,6 @@
 
 	<title><?= isset($title) ? $title : "Manage Stories"?></title>
 
-	<!-- Google Font: Source Sans Pro -->
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="<?=base_url('/assets/plugins/fontawesome-free/css/all.min.css')?>">
 	
@@ -47,11 +45,16 @@
         </div>
         <div class="header-blue-line"></div>
         </div>
-        <?php
-        if(isset($page)) {
-            include($page.'.php');
-        }
-        ?>
+    </div>
+    <?php
+    if(isset($page)) {
+        include($page.'.php');
+    }
+    ?>
+    <div class="footer mt-5">
+        <div class="container-lg">
+            <p>All contents  are copyright 2023, 400 words.org |  <a href="<?= base_url('/guide')?>">About Us</a>
+        </div>
     </div>
 </body>
 </html>

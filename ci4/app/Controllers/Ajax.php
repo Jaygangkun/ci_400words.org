@@ -26,6 +26,8 @@ class Ajax extends BaseController
         ]);
 
         $storyId = $model->getInsertID();
+
+        sendMail('400wordseditor@gmail.com', 'New story submitted', '<a href="'.base_url('/login').'">Admin Login</a>');
         
         return $this->response->setJson([
             'success' => true,
@@ -87,6 +89,8 @@ class Ajax extends BaseController
 
         $sort = isset($_POST['sort']) ? $_POST['sort'] : getSorts()['alphabetical'];
 
+        $this->session->set('indexSort', $sort);
+
         $model = new StoryModel();
 
         if ($sort == getSorts()['alphabetical']) {
@@ -105,17 +109,46 @@ class Ajax extends BaseController
             $all = [];
         }
         
+        $pageLength = 10;
 
-        $data = [];
-        foreach($all as $row) {
+        for($index = 0; $index < count($all); $index ++ ) {
+
+            $col1 = $all[$index];
+
+            $colIndex2 = $index + $pageLength;
+            $col2 = null;
+
+            if (isset($all[$colIndex2])) {
+                $col2 = $all[$colIndex2];
+            }
+
+            $colIndex3 = $index + $pageLength * 2;
+            $col3 = null;
+
+            if (isset($all[$colIndex3])) {
+                $col3 = $all[$colIndex3];
+            }
+
+            $colIndex4 = $index + $pageLength * 3;
+            $col4 = null;
+
+            if (isset($all[$colIndex4])) {
+                $col4 = $all[$colIndex4];
+            }
+
             $data[] = [
-                '<a href="'.base_url('/story/').'/'.$row['id'].'">'.$row['title'].'</a>',
+                $col1 ? '<a href="'.base_url('/story/').'/'.$col1['id'].'">'.$col1['title'].'</a>' : '',
+                $col2 ? '<a href="'.base_url('/story/').'/'.$col2['id'].'">'.$col2['title'].'</a>' : '',
+                $col3 ? '<a href="'.base_url('/story/').'/'.$col3['id'].'">'.$col3['title'].'</a>' : '',
+                $col4 ? '<a href="'.base_url('/story/').'/'.$col4['id'].'">'.$col4['title'].'</a>' : ''
             ];
+            
         }
         
         return $this->response->setJson([
             'success' => true,
             'data' => $data
+            // 'data' => $all
         ]);
     }
 

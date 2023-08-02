@@ -70,17 +70,17 @@
                         }
                         ?>
                         <span class="fw-bold menu-page-link menu-page-link-green me-2" id="btnStoryPublish">Publish</span>
-                        <a class="fw-bold menu-page-link menu-page-link-blue" href="<?=base_url('/home')?>">Admin Home</a>
+                        <a class="menu-page-link menu-page-link-blue" href="<?=base_url('/manage-stories')?>">Admin Home</a>
                     </div>
                     <div>
                         <?php
                         if ($story['is_show'] == 1) {
                             ?>
-                            <span class="fw-bold menu-page-link menu-page-link-yellow me-2 ms-8" id="btnStoryHide">Hide</span>
+                            <span class="menu-page-link menu-page-link-blue me-2 ms-8" id="btnStoryHide">Hide</span>
                             <?php
                         } else {
                             ?>
-                            <span class="fw-bold menu-page-link menu-page-link-green me-2 ms-8" id="btnStoryShow">Show</span>
+                            <span class="menu-page-link menu-page-link-green me-2 ms-8" id="btnStoryShow">Show</span>
                             <?php
                         }
                         ?>
@@ -92,12 +92,26 @@
         </div>
         <script>
         (function($){
+            $(document).on('keyup', '#content', function(event) {
 
-            $(document).on('keyup', '#content', function() {
-                $('#wordsCount').text(countWords($(this).val()));
+            let wordsCount = countWords($(this).val());
+
+                if (wordsCount > maxWordsCount) {
+                    $('#wordsCount').css('color', '#ff0000');
+                    $('#btnStoryPublish').attr('disabled', true);
+                } else {
+                    $('#wordsCount').css('color', '#000000');
+                    $('#btnStoryPublish').attr('disabled', false);
+                }
+
+                $('#wordsCount').text(wordsCount);
             })
             
             $(document).on('click', '#btnStoryPublish', function() {
+                if ($(this).attr('disabled')) {
+                    return;
+                }
+                
                 $.ajax({
                     url: baseUrl + '/ajax/story-publish',
                     type: 'post',
@@ -115,7 +129,7 @@
                     dataType: 'json',
                     success: function(resp) {
                         alert(resp.message);
-                        location.reload();
+                        location.href = "<?=base_url('/manage-stories?subPage=awaitingReview&redirect=1')?>";
                     }
                 })
             })

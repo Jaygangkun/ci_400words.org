@@ -13,21 +13,61 @@ class StoryModel extends Model
 
     protected $db;
 
-    public function getNextStory($id) {
-        $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND id = (SELECT MIN(id) FROM stories WHERE id > '.$id.')');
+    public function getNextStory($story, $sort) {
+
+        $id = $story['id'];
+        
+        if ($sort == getSorts()['popular'] && $story['upvotes'] != 0) {
+            $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND upvotes = (SELECT MAX(upvotes) FROM stories WHERE upvotes < '.$story['upvotes'].')');
+
+        } else if ($sort == getSorts()['popular'] && $story['upvotes'] == 0) {
+            $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND id = (SELECT MIN(id) FROM stories WHERE id > '.$story['id'].')');
+
+        } else if ($sort == getSorts()['newest']) {
+            $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND created_at = (SELECT MAX(created_at) FROM stories WHERE created_at < "'.$story['created_at'].'")');
+
+        } else if ($sort == getSorts()['oldest']) {
+            $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND created_at = (SELECT MAX(created_at) FROM stories WHERE created_at > "'.$id.'")');
+
+        } else {
+            $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND title = (SELECT MAX(title) FROM stories WHERE title < '.$story['title'].')');
+        }
+
         $result = $query->getResult();
 
         if (count($result) > 0) {
             return $result[0];
         }
+
+        return null;
     }
 
-    public function getPreviousStory($id) {
-        $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND id = (SELECT MAX(id) FROM stories WHERE id < '.$id.')');
+    public function getPreviousStory($story, $sort) {
+
+        $id = $story['id'];
+
+        if ($sort == getSorts()['popular'] && $story['upvotes'] != 0) {
+            $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND upvotes = (SELECT MIN(upvotes) FROM stories WHERE upvotes > '.$story['upvotes'].')');
+
+        } else if ($sort == getSorts()['popular'] && $story['upvotes'] == 0) {
+            $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND id = (SELECT MAX(id) FROM stories WHERE id < '.$story['id'].')');
+
+        } else if ($sort == getSorts()['newest']) {
+            $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND created_at = (SELECT MIN(created_at) FROM stories WHERE created_at > "'.$story['created_at'].'")');
+
+        } else if ($sort == getSorts()['oldest']) {
+            $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND created_at = (SELECT MAX(created_at) FROM stories WHERE created_at < "'.$story['created_at'].'")');
+
+        } else {
+            $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND title = (SELECT MIN(title) FROM stories WHERE title > '.$story['title'].')');
+        }
+
         $result = $query->getResult();
 
         if (count($result) > 0) {
             return $result[0];
         }
+
+        return null;
     }
 }

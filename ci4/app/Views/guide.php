@@ -18,9 +18,9 @@
     The 400 Words Editorial Staff
     </p>
     <div class="d-flex mb-5 mt-3">
-        <a class="fw-bold menu-page-link menu-page-link-green me-2" href="<?=base_url('/submit')?>">Submit</a>
-        <a class="menu-page-link menu-page-link-yellow me-2" href="<?=base_url('/index')?>">Index</a>
-        <a class="menu-page-link menu-page-link-yellow me-2" href="<?=base_url('/')?>">Home</a>
+        <a class="fw-bold menu-page-link menu-page-link-green me-2" href="<?=base_url('/submit')?>">Submit a Piece</a>
+        <a class="menu-page-link menu-page-link-blue me-2" href="<?=base_url('/index')?>">Index</a>
+        <a class="menu-page-link menu-page-link-blue me-2" href="<?=base_url('/')?>">Home</a>
     </div>
     <p>For any questions/concerns, email 400wordseditor@gmail.com</p>
 </div>
