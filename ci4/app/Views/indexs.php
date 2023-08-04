@@ -1,24 +1,24 @@
 
 <div class="container-lg">
     <h1 class="mt-3">Index</h1>
-    <div class="d-flex align-items-center">
-        <span>Sort by:</span>
+    <div class="d-flex align-items-center sortby-wrap">
+        <span class="sortby-wrap-title">Sort by:</span>
         <ul class="nav">
             <li class="nav-item">
-                <span class="nav-link btn-story-sort disabled" data-value="<?= getSorts()['alphabetical']?>">[alphabetical]</span>
+                <span class="me-2 menu-page-link menu-page-link-blue nav-link1 btn-story-sort" <?= $sort == 'alphabetical' ? "disabled": "" ?> data-value="<?= getSorts()['alphabetical']?>">A-Z</span>
             </li>
             <li class="nav-item">
-                <span class="nav-link btn-story-sort" data-value="<?= getSorts()['popular']?>">[popular]</span>
+                <span class="me-2 menu-page-link menu-page-link-blue nav-link1 btn-story-sort" <?= $sort == 'popular' ? "disabled": "" ?> data-value="<?= getSorts()['popular']?>">popular</span>
             </li>
             <li class="nav-item">
-                <span class="nav-link btn-story-sort" data-value="<?= getSorts()['newest']?>">[newest]</span>
+                <span class="me-2 menu-page-link menu-page-link-blue nav-link1 btn-story-sort" <?= $sort == 'newest' ? "disabled": "" ?> data-value="<?= getSorts()['newest']?>">newest</span>
             </li>
             <li class="nav-item">
-                <span class="nav-link btn-story-sort" data-value="<?= getSorts()['oldest']?>">[oldest]</span>
+                <span class="menu-page-link menu-page-link-blue nav-link1 btn-story-sort" <?= $sort == 'oldest' ? "disabled": "" ?> data-value="<?= getSorts()['oldest']?>">oldest</span>
             </li>
         </ul>
     </div>
-    <table id="stories" class="table">
+    <table id="stories" class="table mt-3 pb-3">
         <thead>
             <tr>
                 <th scope="col"></th>
@@ -30,17 +30,19 @@
         <tbody>
         
         </tbody>
+        <tfoot>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </tfoot>
     </table>
-
-    <div class="mt-5">
-        <h6>Have feedback for us?</h6>
-        <p>Tell us: <a href="mailto:400wordseditor@gmail.com">400wordseditor@gmail.com</a></p>
-    </div>
 
     <div class="d-flex mt-3">
         <a class="fw-bold menu-page-link menu-page-link-green me-2" href="<?= base_url('/submit')?>">Submit a Piece</a>
-        <a class="menu-page-link menu-page-link-blue me-2" href="<?= base_url('/index')?>">Index</a>
-        <a class="menu-page-link menu-page-link-blue me-2" href="<?= base_url('/home')?>">Home</a>
+        <a class="fw-bold menu-page-link menu-page-link-blue me-2" href="<?= base_url('/home')?>">Home</a>
     </div>
 </div>
 <style>
@@ -53,7 +55,7 @@
 }
 
 .table tbody tr td {
-    padding: 0px;
+    padding: 0px 5px;
 }
 
 .table tbody tr {
@@ -73,9 +75,23 @@
     display: table-row;
 }
 
+.table>:not(:first-child) {
+    border-top: 0px;
+}
+
+table {
+    border-top: 2px solid #000000 !important;
+    /* background: #caf0fe; */
+}
+
+@media screen and (max-width: 768px) {
+
+}
 </style>
 <script>
 const pageLength = 40;
+const removeColIndex2 = 2;
+const removeColIndex3 = 3;
 
 (function($){
     var table = $('#stories').DataTable({
@@ -92,7 +108,8 @@ const pageLength = 40;
             url: baseUrl + '/ajax/story-index-load',
             type: 'post',
             data: function(d) {
-                d.sort = $('.btn-story-sort.disabled').attr('data-value')
+                d.sort = $('.btn-story-sort[disabled]').attr('data-value'),
+                d.isMobile = window.outerWidth < 768 ? 1 : 0
             }
         },
         'drawCallback': function(settings){
@@ -107,9 +124,21 @@ const pageLength = 40;
         }
     });
 
+    if (window.outerWidth < 768) {
+        table.column(removeColIndex2).visible(false);
+        table.column(removeColIndex3).visible(false);
+    }
+    
+
     $(document).on('click', '.btn-story-sort', function() {
-        $('.btn-story-sort').removeClass('disabled');
-        $(this).addClass('disabled');
+
+        if ($(this).attr('disabled')) {
+            return;
+        }
+
+        $('.btn-story-sort').attr('disabled', false);
+
+        $(this).attr('disabled', true);
 
         table.ajax.reload();
     })

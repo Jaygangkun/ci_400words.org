@@ -10,7 +10,7 @@
 
 body {
     font-family: "Calibri";
-    /* font-size: 12px; */
+    font-size: 15px;
 }
 
 body::-webkit-scrollbar {
@@ -21,8 +21,25 @@ h1, h2, h3, h4, h5, h6 {
     font-family: "Calibri-Bold";
 }
 
+h1 {
+    font-size: 21px;
+}
+
+h3 {
+    font-size: 18px;
+}
+
+h6 {
+    font-size: 15px;
+}
+
 .header {
     position: relative;
+}
+
+pre {
+    font-family: "Calibri";
+    font-size: 15px;
 }
 
 .header-logo-img {
@@ -71,6 +88,7 @@ h1, h2, h3, h4, h5, h6 {
     cursor: pointer;
     text-decoration: none;
     color: #000000;
+    display: inline-block;
 }
 
 .menu-page-link:hover {
@@ -133,4 +151,61 @@ h1, h2, h3, h4, h5, h6 {
     border: 0px;
     box-shadow: none !important;
     resize: none !important;
+}
+
+.home-story-wrap { 
+    background: #caf0fe;
+    border: 1px solid #000000;
+}
+
+.home-story-wrap pre {
+    white-space: break-spaces;
+}
+
+.story-view-wrap {
+    background: #caf0fe;
+    border: 1px solid #000000;
+}
+
+.story-view-wrap pre {
+    white-space: break-spaces;
+}
+
+.pagination {
+    justify-content: flex-end;
+}
+
+.sortby-wrap {
+    position: relative;
+}
+
+.sortby-wrap-title {
+    position: absolute;
+    transform: translateX(calc(-100% - 10px));
+}
+
+.mobile-view {
+    display: none;
+}
+
+@media screen and (max-width: 576px) {
+    .header-logo-img {
+        height: 110px;
+    }
+
+    .header-blue-line {
+        top: 49px;
+    }
+
+    #storyViewSubmitButton {
+        display: none;
+    }
+
+    .desktop-view {
+        display: none;
+    }
+
+    .mobile-view {
+        display: block;
+    }
 }

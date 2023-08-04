@@ -9,7 +9,7 @@ class StoryModel extends Model
 
 	protected $returnType = 'array';
 
-	protected $allowedFields = ['title', 'content', 'upvotes', 'views', 'is_best_of', 'is_home', 'words', 'created_at', 'is_show', 'is_publish', 'notes'];
+	protected $allowedFields = ['title', 'content', 'upvotes', 'views', 'is_best_of', 'is_home', 'words', 'created_at', 'is_show', 'is_publish', 'notes', 'published_at'];
 
     protected $db;
 
@@ -30,7 +30,7 @@ class StoryModel extends Model
             $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND created_at = (SELECT MAX(created_at) FROM stories WHERE created_at > "'.$id.'")');
 
         } else {
-            $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND title = (SELECT MAX(title) FROM stories WHERE title < '.$story['title'].')');
+            $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND title = (SELECT MAX(title) FROM stories WHERE title < "'.$story['title'].'")');
         }
 
         $result = $query->getResult();
@@ -59,7 +59,7 @@ class StoryModel extends Model
             $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND created_at = (SELECT MAX(created_at) FROM stories WHERE created_at < "'.$story['created_at'].'")');
 
         } else {
-            $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND title = (SELECT MIN(title) FROM stories WHERE title > '.$story['title'].')');
+            $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND title = (SELECT MIN(title) FROM stories WHERE title > "'.$story['title'].'")');
         }
 
         $result = $query->getResult();

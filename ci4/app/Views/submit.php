@@ -5,7 +5,7 @@
         <div class="col-lg-6">
             <div class="mb-3">
                 <label for="title" class="col-form-label">Title:</label>
-                <input type="text" class="form-control" id="title">
+                <input type="text" class="form-control" id="title" maxlength="40">
             </div>
             <div class="mb-3">
                 <label for="content" class="col-form-label">Content:</label>
@@ -42,7 +42,7 @@
         if ($(this).attr('disabled')) {
             return;
         }
-        
+
         if ($('#title').val() == '') {
             alert('Please Input title');
             $('#title').focus();

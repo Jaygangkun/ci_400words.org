@@ -16,12 +16,12 @@
                 <span class="nav-link btn-story-sort <?= $subPage == 'oldest' ? "disabled": "" ?>" data-value="<?= getSorts()['oldest']?>">[oldest]</span>
             </li>
             <li class="nav-item">
-                <span class="nav-link btn-story-sort <?= $subPage == 'awaitingReview' ? "disabled": "" ?>" data-value="<?= getSorts()['awaitingReview']?>">[awaiting review]</span>
+                <span class="nav-link btn-story-sort <?= $subPage == 'awaitingReview' ? "disabled": "" ?>" data-value="<?= getSorts()['awaitingReview']?>">[awaiting review: <?= $awaitingCount?>]</span>
             </li>
         </ul>
     </div>
     <h3>Live Stories</h3>
-    <table id="stories" class="table table-bordered table-striped text-center">
+    <table id="stories" class="table table-bordered text-center">
         <thead>
             <tr>
                 <th scope="col">Sub No</th>
@@ -45,9 +45,14 @@
 #stories_wrapper .row:first-of-type {
   display: none;
 }
+
+table td {
+    padding: 5px !important;
+}
+
 </style>
 <script>
-const pageLength = 120;
+const pageLength = 20;
 const showColumnIndex = 8;
 const actionColumnIndex = 9;
 
@@ -94,7 +99,7 @@ const actionColumnIndex = 9;
             },
             dataType: 'json',
             success: function(resp) {
-                alert(resp.message);
+                // alert(resp.message);
                 table.ajax.reload();
             }
         })
@@ -109,7 +114,7 @@ const actionColumnIndex = 9;
             },
             dataType: 'json',
             success: function(resp) {
-                alert(resp.message);
+                // alert(resp.message);
                 table.ajax.reload();
             }
         })

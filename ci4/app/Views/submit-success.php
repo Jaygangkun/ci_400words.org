@@ -8,7 +8,7 @@
 
     <div class="d-flex mb-5 mt-3">
         <a class="fw-bold menu-page-link menu-page-link-green me-2" href="<?=base_url('/submit')?>">Submit a Piece</a>
-        <a class="menu-page-link menu-page-link-blue me-2" href="<?=base_url('/index')?>">Index</a>
-        <a class="menu-page-link menu-page-link-blue me-2" href="<?=base_url('/')?>">Home</a>
+        <a class="fw-bold menu-page-link menu-page-link-blue me-2" href="<?=base_url('/index')?>">Index</a>
+        <a class="fw-bold menu-page-link menu-page-link-blue me-2" href="<?=base_url('/')?>">Home</a>
     </div>
 </div>

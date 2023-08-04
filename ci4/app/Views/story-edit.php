@@ -12,7 +12,7 @@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label for="title" class="col-form-label">Title:</label>
-                    <input type="text" class="form-control" id="title" value="<?= $story['title']?>">
+                    <input type="text" class="form-control" id="title" value="<?= $story['title']?>" maxlength="40">
                 </div>
                 <div class="mb-3">
                     <label for="content" class="col-form-label">Content:</label>
@@ -70,17 +70,17 @@
                         }
                         ?>
                         <span class="fw-bold menu-page-link menu-page-link-green me-2" id="btnStoryPublish">Publish</span>
-                        <a class="menu-page-link menu-page-link-blue" href="<?=base_url('/manage-stories')?>">Admin Home</a>
+                        <a class="fw-bold menu-page-link menu-page-link-blue" href="<?=base_url('/manage-stories')?>">Admin Home</a>
                     </div>
                     <div>
                         <?php
-                        if ($story['is_show'] == 1) {
+                        if ($story['is_show'] == 1 || $story['is_show'] == null) {
                             ?>
-                            <span class="menu-page-link menu-page-link-blue me-2 ms-8" id="btnStoryHide">Hide</span>
+                            <span class="fw-bold menu-page-link menu-page-link-blue me-2 ms-8" id="btnStoryHide">Hide</span>
                             <?php
                         } else {
                             ?>
-                            <span class="menu-page-link menu-page-link-green me-2 ms-8" id="btnStoryShow">Show</span>
+                            <span class="fw-bold menu-page-link menu-page-link-green me-2 ms-8" id="btnStoryShow">Show</span>
                             <?php
                         }
                         ?>
@@ -128,7 +128,7 @@
                     },
                     dataType: 'json',
                     success: function(resp) {
-                        alert(resp.message);
+                        // alert(resp.message);
                         location.href = "<?=base_url('/manage-stories?subPage=awaitingReview&redirect=1')?>";
                     }
                 })
@@ -144,7 +144,7 @@
                     },
                     dataType: 'json',
                     success: function(resp) {
-                        alert(resp.message);
+                        // alert(resp.message);
                         location.reload();
                     }
                 })
@@ -159,7 +159,7 @@
                     },
                     dataType: 'json',
                     success: function(resp) {
-                        alert(resp.message);
+                        // alert(resp.message);
                         location.href = baseUrl + '/manage-stories';
                     }
                 })
@@ -175,7 +175,7 @@
                     },
                     dataType: 'json',
                     success: function(resp) {
-                        alert(resp.message);
+                        // alert(resp.message);
                         location.reload();
                     }
                 })
@@ -191,7 +191,7 @@
                     },
                     dataType: 'json',
                     success: function(resp) {
-                        alert(resp.message);
+                        // alert(resp.message);
                         location.reload();
                     }
                 })

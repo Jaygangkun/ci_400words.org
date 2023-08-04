@@ -53,7 +53,7 @@
     ?>
     <div class="footer mt-5">
         <div class="container-lg">
-            <p>All contents  are copyright 2023, 400 words.org |  <a href="<?= base_url('/guide')?>">About Us</a>
+            <p class="text-center">© 2023-24 400words.org |  <a href="mailto:400wordseditor@gmail.com">Contact</a> | <a href="<?= base_url('/guide')?>">About Us</a>
         </div>
     </div>
 </body>

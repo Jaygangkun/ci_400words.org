@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Models\StoryModel;
 use App\Models\ViewModel;
+use App\Models\UpvoteModel;
+use App\Models\UserModel;
 
 class Page extends BaseController
 {
@@ -21,11 +23,55 @@ class Page extends BaseController
         return view('layout', $data);
     }
 
+    public function admin()
+    {
+        $data = [
+            'title' => 'Admin',
+            'page' => 'admin'
+        ];
+
+        return view('layout', $data);
+    }
+
+    public function resetAdmin()
+    {
+        $user_name = isset($_GET['user_name']) ? $_GET['user_name'] : 'admin';
+        $password = isset($_GET['password']) ? $_GET['password'] : 'admin';
+
+        $model = new UserModel();
+        $admin = $model->where('role', 'superAdmin')->findAll();
+
+        if(count($admin) > 0) {
+            $model->update($admin[0]['id'], [
+                'user_name' => $user_name,
+                'password' => md5($password)
+            ]);
+
+        } else {
+            $model->insert([
+                'user_name' => $user_name,
+                'password' => md5($password),
+                'role' => 'superAdmin'
+            ]);
+        }
+
+        return $this->response->setJson([
+            'success' => true
+        ]);
+    }
+
     public function index() {
+
+        $sort = isset($_GET['sort']) ? $_GET['sort'] : null;
+
+        if (!isset(getSorts()[$sort])) {
+            $sort = 'alphabetical';
+        }
 
         $data = [
             'title' => 'Index',
-            'page' => 'indexs'
+            'page' => 'indexs',
+            'sort' => $sort
         ];
 
         return view('layout', $data);
@@ -33,9 +79,13 @@ class Page extends BaseController
 
     public function home() {
 
+        $model = new StoryModel();
+        $stories = $model->where('is_home', 1)->orderBy('published_at', 'DESC')->limit(4)->findAll();
+
         $data = [
             'title' => 'Home',
-            'page' => 'home'
+            'page' => 'home',
+            'stories' => $stories
         ];
 
         return view('layout', $data);
@@ -83,11 +133,14 @@ class Page extends BaseController
             $subPage = 'alphabetical';
         }
 
-        if ($subPage == 'awaitingReview') {
-            $model = new StoryModel();
-            $all = $model->where('is_publish <> 1 OR is_publish IS NULL')->findAll();
+        
+        $model = new StoryModel();
+        $awaitings = $model->where('is_publish <> 1 OR is_publish IS NULL')->findAll();
+        $awaitingCount = count($awaitings);
 
-            if (count($all) == 0) {
+        if ($subPage == 'awaitingReview') {
+
+            if ($awaitingCount == 0) {
                 $subPage = 'alphabetical';
             }
         }
@@ -96,7 +149,8 @@ class Page extends BaseController
             'title' => 'Manage Stories',
             'page' => 'manage-stories',
             'subPage' => $subPage,
-            'redirect' => isset($_GET['redirect']) ? $_GET['redirect'] : null
+            'redirect' => isset($_GET['redirect']) ? $_GET['redirect'] : null,
+            'awaitingCount' => $awaitingCount
         ];
 
         return view('layout', $data);
@@ -126,6 +180,10 @@ class Page extends BaseController
         $story = $model->find($id);
         $nextStory = null;
         $previousStory = null;
+
+        if ($story['is_publish'] != 1 && $story['is_show'] != 1) {
+            return redirect()->to(base_url('/index'));
+        }
 
         if ($story) {
 
@@ -158,13 +216,17 @@ class Page extends BaseController
             ]);
         }
         
+        $modelUpvote = new UpvoteModel();
+        $upvotes = $modelUpvote->where('story_id', $id)->where('user_ip', $ip)->where('user_browser', $browser)->findAll();
+
 
         $data = [
             'title' => 'Story',
             'page' => 'story-view',
             'story' => $story,
             'nextStory' => $nextStory,
-            'previousStory' => $previousStory
+            'previousStory' => $previousStory,
+            'isUpvoted' => count($upvotes) > 0
         ];
 
         return view('layout', $data);

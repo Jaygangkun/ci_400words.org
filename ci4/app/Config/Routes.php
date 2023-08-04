@@ -42,6 +42,8 @@ $routes->get('/manage-stories/awaiting-review', 'Page::manageStoriesAwaitingRevi
 $routes->get('/story-edit/(:any)', 'Page::storyEdit/$1');
 $routes->get('/story/(:any)', 'Page::storyView/$1');
 $routes->get('/login', 'Page::login');
+$routes->get('/admin', 'Page::admin');
+$routes->get('/reset-admin', 'Page::resetAdmin');
 $routes->get('/test', 'Page::test');
 
 // Ajax Calls
@@ -55,6 +57,7 @@ $routes->group("ajax", function ($routes) {
     $routes->post('story-publish', 'Ajax::storyPublish');
     $routes->post('story-upvote', 'Ajax::storyUpvote');
     $routes->post('login', 'Ajax::login');
+    $routes->post('admin-change', 'Ajax::adminChange');
 });
 
 /*
