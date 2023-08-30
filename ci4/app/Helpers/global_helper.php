@@ -11,13 +11,9 @@ if(!function_exists('sendMail')){
         $mail = new PHPMailer();
 
         $mail->IsSMTP();
-        // $mail->Host = 'smtp.titan.email';
-        // $mail->Username = 'editor@400words.org';
-        // $mail->Password = '!B4ycgiyn2kmp!';
-        // $mail->Port = 465;
         $mail->Host = 'smtp.gmail.com';
-        $mail->Username = '400wordseditor@gmail.com';
-        $mail->Password = 'qnilmhsezpfgkpux';
+        $mail->Username = '';
+        $mail->Password = '';
         $mail->Port = 587;
 
         $mail->SMTPAuth = true;
