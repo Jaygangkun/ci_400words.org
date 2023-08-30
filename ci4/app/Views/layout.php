@@ -41,7 +41,7 @@
 <body>
     <div class="header">
         <div class="container-lg">
-            <a href="<?=base_url()?>"><img class="header-logo-img" src="/assets/img/logo.png"></a>
+            <a href="<?=base_url()?>"><img class="header-logo-img" src="<?=base_url('/assets/img/logo.png')?>"></a>
         </div>
         <div class="header-blue-line"></div>
         </div>
@@ -51,9 +51,16 @@
         include($page.'.php');
     }
     ?>
-    <div class="footer mt-5">
+    <div class="footer mt-5 pb-5">
         <div class="container-lg">
             <p class="text-center">© 2023-24 400words.org |  <a href="mailto:400wordseditor@gmail.com">Contact</a> | <a href="<?= base_url('/guide')?>">About Us</a>
+            <div class="text-center">
+                <a href="#"><img class="social-icon" src="<?=base_url('/assets/img/icon-fb.png')?>"></a>
+                <a href="#"><img class="social-icon" src="<?=base_url('/assets/img/icon-ig.png')?>"></a>
+                <a href="#"><img class="social-icon" src="<?=base_url('/assets/img/icon-rd.png')?>"></a>
+                <a href="#"><img class="social-icon" src="<?=base_url('/assets/img/icon-x.png')?>"></a>
+                <a href="#"><img class="social-icon" src="<?=base_url('/assets/img/icon-th.png')?>"></a>
+            </div>
         </div>
     </div>
 </body>

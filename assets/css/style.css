@@ -156,6 +156,7 @@ pre {
 .home-story-wrap { 
     background: #caf0fe;
     border: 1px solid #000000;
+    border-radius: 5px;
 }
 
 .home-story-wrap pre {
@@ -186,6 +187,25 @@ pre {
 
 .mobile-view {
     display: none;
+}
+
+.stories-table {
+    display: flex;
+    border: 1px solid #212529;
+    border-radius: 6px;
+    background: #caf0fe;
+    padding: 10px 5px;
+    margin-bottom: 20px;
+}
+
+.story-table-col {
+    width: 250px;
+    padding: 0px 5px;
+    box-sizing: content-box;
+}
+
+.results {
+    margin-top: 10px;
 }
 
 @media screen and (max-width: 576px) {

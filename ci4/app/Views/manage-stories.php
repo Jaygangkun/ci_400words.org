@@ -100,7 +100,7 @@ const actionColumnIndex = 9;
             dataType: 'json',
             success: function(resp) {
                 // alert(resp.message);
-                table.ajax.reload();
+                table.ajax.reload(null, false);
             }
         })
     })

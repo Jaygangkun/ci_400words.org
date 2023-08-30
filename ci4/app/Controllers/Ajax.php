@@ -89,88 +89,109 @@ class Ajax extends BaseController
     public function storyIndexLoad() {
 
         $sort = isset($_POST['sort']) ? $_POST['sort'] : getSorts()['alphabetical'];
+        $curPageIndex = isset($_POST['curPageIndex']) ? $_POST['curPageIndex'] : 0;
+        $pageHeight = isset($_POST['pageHeight']) ? $_POST['pageHeight'] : 3;
         $isMobile = isset($_POST['isMobile']) ? $_POST['isMobile'] : 0;
+        $isSearch = isset($_POST['isSearch']) ? $_POST['isSearch'] : 0;
+        $searchKeyword = isset($_POST['searchKeyword']) ? $_POST['searchKeyword'] : '';
+
+        if ($isMobile == 0) {
+            $pageSize = $pageHeight * 4;
+        } else {
+            $pageSize = $pageHeight * 1;
+        }
+        
+
+        $dbOffset = $pageSize * $curPageIndex;
+        $dbLimit = $pageSize;
 
         $this->session->set('indexSort', $sort);
 
         $model = new StoryModel();
 
+        $dataLength = $model->getIndexStoryCount($isSearch == 1 ? $searchKeyword : '');
+        $pageCount = ceil($dataLength / $pageSize);
+
+        
+        if ($isSearch == 1 && $searchKeyword != '') {
+            $query = $model
+                ->where('is_show', 1)
+                ->where('is_publish', 1)
+                ->where('(title LIKE "%'.$searchKeyword.'%" OR content LIKE "%'.$searchKeyword.'%")');
+        } else {
+            $query = $model->where('is_show', 1)->where('is_publish', 1);
+        }
+        
+
         if ($sort == getSorts()['alphabetical']) {
-            $all = $model->where('is_show', 1)->where('is_publish', 1)->orderBy('title', 'ASC')->findAll();
+            $all = $query->orderBy('title', 'ASC')->findAll($dbLimit, $dbOffset);
 
         } else if ($sort == getSorts()['popular']) {
-            $all = $model->where('is_show', 1)->where('is_publish', 1)->orderBy('upvotes', 'DESC')->findAll();
+            $all = $query->orderBy('upvotes', 'DESC')->findAll($dbLimit, $dbOffset);
 
         } else if ($sort == getSorts()['newest']) {
-            $all = $model->where('is_show', 1)->where('is_publish', 1)->orderBy('created_at', 'DESC')->findAll();
+            $all = $query->orderBy('created_at', 'DESC')->findAll($dbLimit, $dbOffset);
 
         } else if ($sort == getSorts()['oldest']) {
-            $all = $model->where('is_show', 1)->where('is_publish', 1)->orderBy('created_at', 'ASC')->findAll();
+            $all = $query->orderBy('created_at', 'ASC')->findAll($dbLimit, $dbOffset);
 
         } else {
             $all = [];
         }
         
-        $pageLength = 10;
+        $resultTable = '<!-- table start --><div class="stories-table"><!-- col start --><div class="story-table-col">';
+        $heightIndex = 0;
 
         for($index = 0; $index < count($all); $index ++ ) {
 
-            if ($isMobile == 1) {
-                $col1 = $all[$index];
-
-                $colIndex2 = $index + $pageLength;
-                $col2 = null;
-    
-                if (isset($all[$colIndex2])) {
-                    $col2 = $all[$colIndex2];
-                }
-    
-                $data[] = [
-                    $col1 ? '<a href="'.base_url('/story/').'/'.$col1['id'].'">'.$col1['title'].'</a>' : '',
-                    $col2 ? '<a href="'.base_url('/story/').'/'.$col2['id'].'">'.$col2['title'].'</a>' : '',
-                    '',
-                    ''
-                ];
-            } else {
-                $col1 = $all[$index];
-
-                $colIndex2 = $index + $pageLength;
-                $col2 = null;
-    
-                if (isset($all[$colIndex2])) {
-                    $col2 = $all[$colIndex2];
-                }
-    
-                $colIndex3 = $index + $pageLength * 2;
-                $col3 = null;
-    
-                if (isset($all[$colIndex3])) {
-                    $col3 = $all[$colIndex3];
-                }
-    
-                $colIndex4 = $index + $pageLength * 3;
-                $col4 = null;
-    
-                if (isset($all[$colIndex4])) {
-                    $col4 = $all[$colIndex4];
-                }
-    
-                $data[] = [
-                    $col1 ? '<a href="'.base_url('/story/').'/'.$col1['id'].'">'.$col1['title'].'</a>' : '',
-                    $col2 ? '<a href="'.base_url('/story/').'/'.$col2['id'].'">'.$col2['title'].'</a>' : '',
-                    $col3 ? '<a href="'.base_url('/story/').'/'.$col3['id'].'">'.$col3['title'].'</a>' : '',
-                    $col4 ? '<a href="'.base_url('/story/').'/'.$col4['id'].'">'.$col4['title'].'</a>' : ''
-                ];
+            $cell = '<div class="story-table-cell"><a href="'.base_url('/story/').'/'.$all[$index]['id'].'">'.$all[$index]['title'].'</a></div>';
+            
+            if ($heightIndex >= $pageHeight) {
+                $resultTable .= '</div><!--//col end --><!-- col start --><div class="story-table-col">';
+                $heightIndex = 0;
             }
-            
-            
+
+            $resultTable .= $cell;
+
+            $heightIndex ++;
         }
+
+        $resultTable .= '</div><!--//col end --></div><!-- //table end -->';
+
+        $resultPagination = '';
         
-        return $this->response->setJson([
-            'success' => true,
-            'data' => $data
-            // 'data' => $all
-        ]);
+        if ($pageCount > 1) {
+            $resultPagination = <<<EOD
+                <!-- pagination start -->
+                <div class="stories-pagination">
+                    <ul class="pagination">
+            EOD;
+                
+            for($pageIndex = 0; $pageIndex < $pageCount; $pageIndex ++ ) {
+
+                $displayPageIndex = $pageIndex + 1;
+    
+                if ($pageIndex == $curPageIndex) {
+                    $resultPagination .= '<li class="page-item active"><span data-pIndex="'.$pageIndex.'" class="page-link">'.$displayPageIndex.'</span></li>';
+                } else {
+                    $resultPagination .= '<li class="page-item"><span data-pIndex="'.$pageIndex.'" class="page-link">'.$displayPageIndex.'</span></li>';
+                }
+                
+            }
+
+            $resultPagination .= <<<EOD
+                </ul>
+            </div><!-- //pagination end -->
+            EOD;
+        }        
+
+        return $this->response->setStatusCode(200)->setBody($resultTable . $resultPagination);
+        
+        // return $this->response->setJson([
+        //     'success' => true,
+        //     // 'data' => $data
+        //     // 'data' => $all
+        // ]);
     }
 
     public function storyChangeVisibility() {

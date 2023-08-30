@@ -70,4 +70,17 @@ class StoryModel extends Model
 
         return null;
     }
+
+    public function getIndexStoryCount($searchKeyword) {
+
+        if ($searchKeyword != '') {
+            $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1 AND (title LIKE "%'.$searchKeyword.'%" OR content LIKE "%'.$searchKeyword.'%")');
+        } else {
+            $query = $this->db->query('SELECT * FROM stories WHERE is_publish = 1 AND is_show = 1');
+        }
+        
+        $result = $query->getResult();
+
+        return count($result);
+    }
 }

@@ -1,9 +1,9 @@
 
-<div class="container-lg">
-    <h1 class="mt-3">Index</h1>
-    <div class="d-flex align-items-center sortby-wrap">
+<div class="container-lg" id="indexs_container">
+    <h1 class="mt-3" id="page_title">Index</h1>
+    <div class="d-flex align-items-center sortby-wrap justify-content-between index-top-wrap">
         <span class="sortby-wrap-title">Sort by:</span>
-        <ul class="nav">
+        <ul class="nav nav-wrap">
             <li class="nav-item">
                 <span class="me-2 menu-page-link menu-page-link-blue nav-link1 btn-story-sort" <?= $sort == 'alphabetical' ? "disabled": "" ?> data-value="<?= getSorts()['alphabetical']?>">A-Z</span>
             </li>
@@ -17,118 +17,63 @@
                 <span class="menu-page-link menu-page-link-blue nav-link1 btn-story-sort" <?= $sort == 'oldest' ? "disabled": "" ?> data-value="<?= getSorts()['oldest']?>">oldest</span>
             </li>
         </ul>
+        <div class="search-wrap">
+            <div class="d-flex align-items-center">
+                <span class="me-2">Search:</span>
+                <input type="text" class="form-control me-2 p-1" id="search_keyword">
+                <span class="fw-bold menu-page-link menu-page-link-green" id="btn_search">Go</span>
+            </div>
+        </div>
     </div>
-    <table id="stories" class="table mt-3 pb-3">
-        <thead>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="results" id="results">
         
-        </tbody>
-        <tfoot>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-            </tr>
-        </tfoot>
-    </table>
-
+    </div>
+    
     <div class="d-flex mt-3">
         <a class="fw-bold menu-page-link menu-page-link-green me-2" href="<?= base_url('/submit')?>">Submit a Piece</a>
         <a class="fw-bold menu-page-link menu-page-link-blue me-2" href="<?= base_url('/home')?>">Home</a>
     </div>
 </div>
 <style>
-#stories_wrapper .row:first-of-type {
-  display: none;
+.page-link {
+    cursor: pointer;
 }
 
-.table>:not(caption)>*>* {
-    border-width: 0px;
+#indexs_container {
+    max-width: 1050px;
 }
 
-.table tbody tr td {
-    padding: 0px 5px;
-}
+@media screen and (max-width: 767px) {
 
-.table tbody tr {
-    display: none;
-}
+    .index-top-wrap {
+        flex-wrap: wrap;
+    }
 
-.table tbody tr:nth-of-type(40n+1),
-.table tbody tr:nth-of-type(40n+2),
-.table tbody tr:nth-of-type(40n+3),
-.table tbody tr:nth-of-type(40n+4),
-.table tbody tr:nth-of-type(40n+5),
-.table tbody tr:nth-of-type(40n+6),
-.table tbody tr:nth-of-type(40n+7),
-.table tbody tr:nth-of-type(40n+8),
-.table tbody tr:nth-of-type(40n+9),
-.table tbody tr:nth-of-type(40n+10) {
-    display: table-row;
-}
+    .sortby-wrap-title {
+        display: none;
+    }
 
-.table>:not(:first-child) {
-    border-top: 0px;
-}
+    .search-wrap {
+        order: 1;
+        margin-top: 10px;
+    }
 
-table {
-    border-top: 2px solid #000000 !important;
-    /* background: #caf0fe; */
-}
+    .nav-wrap {
+        order: 2;
+    }
 
-@media screen and (max-width: 768px) {
-
+    .nav-wrap .nav-item {
+        margin-top: 10px;
+    }
 }
 </style>
 <script>
-const pageLength = 40;
-const removeColIndex2 = 2;
-const removeColIndex3 = 3;
+const pageHeight = 10;
+let curPageIndex = 0;
+let pageCount = 0;
+let isSearch = 0;
 
-(function($){
-    var table = $('#stories').DataTable({
-        "pagingType": 'full_numbers',
-        "paging": true,
-        "lengthChange": false,
-        "searching": true,
-        "ordering": false,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-        'pageLength': pageLength,
-        'ajax': {
-            url: baseUrl + '/ajax/story-index-load',
-            type: 'post',
-            data: function(d) {
-                d.sort = $('.btn-story-sort[disabled]').attr('data-value'),
-                d.isMobile = window.outerWidth < 768 ? 1 : 0
-            }
-        },
-        'drawCallback': function(settings){
-            var $api = this.api();
-            var pages = $api.page.info().pages;
-
-            if (pages == 1) {
-                $('#stories_paginate').hide();
-            } else {
-                $('#stories_paginate').show();
-            }
-        }
-    });
-
-    if (window.outerWidth < 768) {
-        table.column(removeColIndex2).visible(false);
-        table.column(removeColIndex3).visible(false);
-    }
-    
+(function($){    
 
     $(document).on('click', '.btn-story-sort', function() {
 
@@ -140,7 +85,50 @@ const removeColIndex3 = 3;
 
         $(this).attr('disabled', true);
 
-        table.ajax.reload();
+        loadData();
     })
+
+    
+    function loadData() {
+
+        $.ajax({
+            url: baseUrl + '/ajax/story-index-load',
+            type: 'post',
+            data: {
+                sort: $('.btn-story-sort[disabled]').attr('data-value'),
+                curPageIndex: curPageIndex,
+                pageHeight: pageHeight,
+                isMobile: window.outerWidth < 768 ? 1 : 0,
+                searchKeyword: $('#search_keyword').val(),
+                isSearch: isSearch
+            },
+            success: function(resp) {
+
+                if (isSearch == 1 && $('#search_keyword').val() != '') {
+                    $('#page_title').text('Search Results')
+                } else {
+                    $('#page_title').text('Index')
+                }
+                
+                $('#results').html(resp);
+            }
+        })
+    }
+
+    loadData();
+
+    $(document).on('click', '.page-link', function() {
+        curPageIndex = $(this).attr('data-pIndex');
+
+        loadData();
+    })
+
+    $(document).on('click', '#btn_search', function() {
+        isSearch = 1;
+        curPageIndex = 0;
+
+        loadData();
+    })
+
 })(jQuery)
 </script>
