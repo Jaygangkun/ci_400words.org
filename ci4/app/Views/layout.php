@@ -37,6 +37,12 @@
 	<script src="<?=base_url('/assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js')?>"></script>
 
     <script src="<?=base_url('/assets/js/global.js')?>"></script>
+
+    <style type="text/css">
+        #toolbarContainer {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div class="header">
